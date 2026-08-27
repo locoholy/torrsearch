@@ -1,0 +1,132 @@
+:root {
+	color-scheme: dark;
+	--bg: #14161a;
+	--panel: #1c1f26;
+	--line: #2b303a;
+	--text: #e6e8ec;
+	--muted: #8b93a3;
+	--accent: #5aa9ff;
+	--ok: #4ec97a;
+	--warn: #e0b341;
+	--err: #e06c6c;
+}
+
+* { box-sizing: border-box; }
+
+body {
+	margin: 0;
+	padding: 16px;
+	background: var(--bg);
+	color: var(--text);
+	font: 15px/1.45 system-ui, "Segoe UI", Roboto, sans-serif;
+}
+
+header { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+
+form { display: flex; gap: 8px; }
+
+input, button {
+	font: inherit;
+	border-radius: 8px;
+	border: 1px solid var(--line);
+	background: var(--panel);
+	color: var(--text);
+	padding: 10px 12px;
+}
+
+#q { flex: 1; min-width: 0; }
+input:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+button { cursor: pointer; }
+button:hover { border-color: var(--accent); }
+
+#go { background: var(--accent); border-color: var(--accent); color: #06101d; font-weight: 600; padding-inline: 20px; }
+#go[disabled] { opacity: .55; cursor: default; }
+
+.sources { display: flex; flex-wrap: wrap; gap: 6px 14px; color: var(--muted); font-size: 14px; }
+.sources label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+
+/* Панель состояния — та самая обратная связь: по каждому источнику видно,
+   ищет он сейчас, сколько нашёл или почему не ответил. */
+.status { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+
+.chip {
+	display: inline-flex; align-items: center; gap: 7px;
+	padding: 5px 11px; border-radius: 999px;
+	background: var(--panel); border: 1px solid var(--line);
+	font-size: 13px; white-space: nowrap;
+}
+.chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); flex: none; }
+.chip .ms { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.chip.pending .dot { background: var(--accent); animation: pulse 1s ease-in-out infinite; }
+.chip.ok      .dot { background: var(--ok); }
+.chip.empty   .dot { background: var(--muted); }
+.chip.timeout .dot { background: var(--warn); }
+.chip.error   .dot { background: var(--err); }
+.chip.timeout, .chip.error { border-color: color-mix(in srgb, var(--err) 40%, var(--line)); }
+
+@keyframes pulse { 50% { opacity: .25; } }
+
+.toolbar { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+.toolbar #filter { flex: 1; min-width: 0; }
+.counter { color: var(--muted); font-size: 14px; white-space: nowrap; }
+
+table { width: 100%; border-collapse: collapse; }
+
+th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+
+th {
+	position: sticky; top: 0; z-index: 1;
+	background: var(--bg); color: var(--muted);
+	font-size: 13px; font-weight: 600; white-space: nowrap;
+}
+th[data-sort] { cursor: pointer; user-select: none; }
+th[data-sort]:hover { color: var(--text); }
+th[data-sort].active { color: var(--accent); }
+
+.col-date, .col-size, .col-peers, .col-act { width: 1%; white-space: nowrap; }
+td.col-size, td.col-peers { font-variant-numeric: tabular-nums; }
+
+tbody tr:hover { background: #ffffff08; }
+
+.src-tag {
+	display: inline-block; padding: 2px 8px; border-radius: 6px;
+	background: #ffffff10; color: var(--muted); font-size: 12px; white-space: nowrap;
+}
+
+.title a { color: var(--text); text-decoration: none; }
+.title a:hover { color: var(--accent); text-decoration: underline; }
+
+.seed { color: var(--ok); }
+.leech { color: var(--muted); }
+
+.actions { display: flex; gap: 6px; }
+.actions button { padding: 4px 9px; font-size: 13px; }
+.actions button.busy { opacity: .5; cursor: progress; }
+
+.empty { color: var(--muted); text-align: center; padding: 28px; }
+
+.toast {
+	position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+	background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+	padding: 10px 16px; max-width: min(90vw, 560px); box-shadow: 0 8px 28px #0008;
+}
+.toast.err { border-color: var(--err); }
+
+@media (max-width: 720px) {
+	.col-date { display: none; }
+	th, td { padding: 7px 6px; }
+}
+
+.chip.setup .dot { background: var(--warn); }
+.chip.setup { border-color: color-mix(in srgb, var(--warn) 45%, var(--line)); }
+/* Источник без статистики пиров (byrut) — своя метрика, приглушённо. */
+.peers-alt { color: var(--muted); font-variant-numeric: tabular-nums; }
+.sources label.not-ready { opacity: .55; }
+/* Живые цифры с трекера — визуально отличаются от нарисованных сайтом,
+   а неподтверждённые (закрытый трекер источника) помечены отдельно. */
+.col-peers.unverified::after { content: '?'; color: var(--warn); margin-left: 4px; }
+.col-peers.live .seed { font-weight: 600; }
+.col-peers.live::after { content: '·'; color: var(--ok); margin-left: 4px; }
+#health { padding: 8px 12px; white-space: nowrap; }

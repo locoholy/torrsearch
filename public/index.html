@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Поиск торрентов</title>
+	<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+	<header>
+		<form id="form" autocomplete="off">
+			<input id="q" type="search" placeholder="Что ищем?" autofocus spellcheck="false">
+			<button id="go" type="submit">Найти</button>
+		</form>
+		<div id="sources" class="sources"></div>
+	</header>
+
+	<section id="status" class="status" hidden></section>
+
+	<section class="toolbar" hidden id="toolbar">
+		<input id="filter" type="search" placeholder="Фильтр по названию…" spellcheck="false">
+		<button id="health" type="button" title="Спросить сиды у самих трекеров — цифры трекерных сайтов бывают старыми">Живые сиды</button>
+		<span id="counter" class="counter"></span>
+	</section>
+
+	<table id="table" hidden>
+		<thead>
+			<tr>
+				<th class="col-src">Источник</th>
+				<th data-sort="title">Название</th>
+				<th data-sort="dateTs" class="col-date">Дата</th>
+				<th data-sort="sizeBytes" class="col-size">Размер</th>
+				<th data-sort="seeders" class="col-peers">S / L</th>
+				<th class="col-act"></th>
+			</tr>
+		</thead>
+		<tbody id="rows"></tbody>
+	</table>
+
+	<p id="empty" class="empty" hidden></p>
+	<div id="toast" class="toast" hidden></div>
+
+	<script src="/app.js" type="module"></script>
+</body>
+</html>
